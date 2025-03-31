@@ -222,15 +222,14 @@ static int transport_bio_named_read(BIO* bio, char* buf, int size)
 	if ((size >= 0) && ret)
 	{
 		DataChunk chunks[2] = { 0 };
-		const int nchunks =
-		    ringbuffer_peek(&ptr->readBuffer, chunks, WINPR_ASSERTING_INT_CAST(size_t, ret));
+		const int nchunks = ringbuffer_peek(&ptr->readBuffer, chunks, ret);
 		for (int i = 0; i < nchunks; i++)
 		{
 			memcpy(buf, chunks[i].data, chunks[i].size);
 			buf += chunks[i].size;
 		}
 
-		ringbuffer_commit_read_bytes(&ptr->readBuffer, WINPR_ASSERTING_INT_CAST(size_t, ret));
+		ringbuffer_commit_read_bytes(&ptr->readBuffer, ret);
 
 		WLog_VRB(TAG, "(%d)=%" PRIdz " nchunks=%d", size, ret, nchunks);
 	}
@@ -537,13 +536,13 @@ BIO* createChildSessionBio(void)
 		return NULL;
 	}
 
-	BIO_set_handle(lowLevelBio, &f);
+	BIO_set_handle(lowLevelBio, f);
 	BIO* bufferedBio = BIO_new(BIO_s_buffered_socket());
 
 	if (!bufferedBio)
 	{
 		BIO_free_all(lowLevelBio);
-		return NULL;
+		return FALSE;
 	}
 
 	bufferedBio = BIO_push(bufferedBio, lowLevelBio);
