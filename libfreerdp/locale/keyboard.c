@@ -246,11 +246,10 @@ static int freerdp_detect_keyboard(DWORD* keyboardLayoutId)
 	}
 
 	if (*keyboardLayoutId == 0)
-	{
-		const HKL layout = GetKeyboardLayout(0);
-		const uint32_t masked = (uint32_t)(((uintptr_t)layout >> 16) & 0xFFFF);
-		*keyboardLayoutId = masked;
-	}
+    {
+        const HKL layout = GetKeyboardLayout(0);
+        *keyboardLayoutId = (DWORD)(uintptr_t)layout; // Use full layout ID
+    }
 #endif
 
 #if defined(__MACOSX__)

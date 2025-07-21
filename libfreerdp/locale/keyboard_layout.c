@@ -603,6 +603,7 @@ static const RDP_KEYBOARD_LAYOUT sRDP_KEYBOARD_LAYOUT_TABLE[] = {
 	{ 0x0000040b, "Finnish" },
 	{ 0x0001083b, "Finnish with Sami" },
 	{ 0x0000040c, "French" },
+	{ 0x0001040c, "French (Standard, AZERTY)" },
 	{ 0x00120c00, "Futhark" },
 	{ 0x00000437, "Georgian" },
 	{ 0x00020437, "Georgian (Ergonomic)" },
