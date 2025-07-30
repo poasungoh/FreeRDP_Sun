@@ -147,7 +147,7 @@ int PubSub_Subscribe(wPubSub* pubSub, const char* EventName, ...)
 	return status;
 }
 
-int PubSub_SubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler)
+WINPR_API int PubSub_SubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler)
 {
 	wEventType* event = NULL;
 	int status = -1;
