@@ -147,6 +147,33 @@ int PubSub_Subscribe(wPubSub* pubSub, const char* EventName, ...)
 	return status;
 }
 
+int PubSub_SubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler)
+{
+	wEventType* event = NULL;
+	int status = -1;
+	WINPR_ASSERT(pubSub);	
+
+	if (pubSub->synchronized)
+		PubSub_Lock(pubSub);
+
+	event = PubSub_FindEventType(pubSub, EventName);
+
+	if (event)
+	{
+		status = 0;
+
+		if (event->EventHandlerCount < MAX_EVENT_HANDLERS)
+			event->EventHandlers[event->EventHandlerCount++] = handler;
+		else
+			status = -1;
+	}
+
+	if (pubSub->synchronized)
+		PubSub_Unlock(pubSub);
+
+	return status;
+}
+
 int PubSub_Unsubscribe(wPubSub* pubSub, const char* EventName, ...)
 {
 	wEventType* event = NULL;
