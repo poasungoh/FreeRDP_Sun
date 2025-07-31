@@ -215,6 +215,42 @@ int PubSub_Unsubscribe(wPubSub* pubSub, const char* EventName, ...)
 	return status;
 }
 
+WINPR_API int PubSub_UnsubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler)
+{
+	wEventType* event = NULL;
+	int status = -1;
+	WINPR_ASSERT(pubSub);
+	WINPR_ASSERT(EventName);
+
+	if (pubSub->synchronized)
+		PubSub_Lock(pubSub);
+
+	event = PubSub_FindEventType(pubSub, EventName);
+
+	if (event)
+	{
+		status = 0;
+
+		for (size_t index = 0; index < event->EventHandlerCount; index++)
+		{
+			if (event->EventHandlers[index] == handler)
+			{
+				event->EventHandlers[index] = NULL;
+				event->EventHandlerCount--;
+				MoveMemory((void*)&event->EventHandlers[index],
+				           (void*)&event->EventHandlers[index + 1],
+				           (MAX_EVENT_HANDLERS - index - 1) * sizeof(pEventHandler));
+				status = 1;
+			}
+		}
+	}
+
+	if (pubSub->synchronized)
+		PubSub_Unlock(pubSub);
+
+	return status;
+}
+
 int PubSub_OnEvent(wPubSub* pubSub, const char* EventName, void* context, const wEventArgs* e)
 {
 	wEventType* event = NULL;

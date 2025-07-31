@@ -871,9 +871,12 @@ extern "C"
 	WINPR_API wEventType* PubSub_FindEventType(wPubSub* pubSub, const char* EventName);
 
 	WINPR_API int PubSub_Subscribe(wPubSub* pubSub, const char* EventName, ...);
+
 	WINPR_API int PubSub_SubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler);
 
 	WINPR_API int PubSub_Unsubscribe(wPubSub* pubSub, const char* EventName, ...);
+
+	WINPR_API int PubSub_UnsubscribeNew(wPubSub* pubSub, const char* EventName, pEventHandler handler);
 
 	WINPR_API int PubSub_OnEvent(wPubSub* pubSub, const char* EventName, void* context,
 	                             const wEventArgs* e);
